@@ -1,0 +1,24 @@
+mutation upsert_time($objects: [time_log_insert_input!]!) {
+  insert_time_log(objects: $objects, on_conflict: {constraint: time_log_pkey, update_columns: [
+      project,
+      task_title,
+      description,
+      first_name,
+      last_name,
+      task_id,
+      time_decimal,
+      time_normal,
+  ]}) {
+    returning {
+      id
+      project
+      task_title
+      description
+      first_name
+      last_name
+      task_id
+      time_decimal
+      time_normal
+    }
+  }
+}

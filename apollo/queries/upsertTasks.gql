@@ -1,0 +1,16 @@
+mutation upsert_task($objects: [tasks_insert_input!]!) {
+  insert_tasks(objects: $objects, on_conflict: {constraint: tasks_pkey, update_columns: [
+    project,
+    task_title,
+    task_description,
+    task_time_estimate
+  ]}) {
+    returning {
+      id
+      project
+      task_title
+      task_description
+      task_time_estimate
+    }
+  }
+}
