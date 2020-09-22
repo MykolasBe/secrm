@@ -1,7 +1,7 @@
 <template>
   <div>
     <h3>Import tasks</h3>
-    <button v-on:click.stop="addTasks()"> Import! </button>
+    <button v-on:click.stop="addTasks(), addSubTasks()"> Import! </button>
 
     <h3>Import time logs</h3>
     <button v-on:click.stop="addTime()"> Import! </button>
@@ -11,19 +11,34 @@
 <script>
 import taskMutation from '~/apollo/queries/upsertTasks.gql'
 import timeMutation from '~/apollo/queries/upsertTimes.gql'
+import subTaskMutation from '~/apollo/queries/upsertSubTask.gql'
 
 import taskData from '~/static/DB seed/Tasks.json'
 import timeData from "~/static/DB seed/Time.json"
 
-const tasks = taskData["todo-items"].map(function(task){
+const tasks = taskData["todo-items"].filter(function (task){return task.parentTaskId === "";}).map(
+  function(task){
   return {
     "id": task.id,
     "project": task["project-name"],
     "task_description": task.description,
     "task_title": task.content,
-    "task_time_estimate": parseInt(task.estimatedTime)
+    "task_time_estimate": parseInt(task.estimatedTime),
+    "created_at": task["created-on"],
   }
 })
+
+const subTasks = taskData["todo-items"].filter(function (task){return task.parentTaskId !== "";}).map(
+  function(task){
+    return {
+      "id": task.id,
+      "task_description": task.description,
+      "task_title": task.content,
+      "task_time_estimate": parseInt(task.estimatedTime),
+      "created_at": task["created-on"],
+      "parent_task_id": parseInt(task.parentTaskId)
+    }
+  })
 
 const times = timeData["time-entries"].map(function(timeLog){
   return {
@@ -45,6 +60,13 @@ export default {
       this.$apollo.mutate({
         mutation: taskMutation,
         variables: { objects: tasks } ,
+        // prefetch: true,
+      })
+    },
+    addSubTasks(){
+      this.$apollo.mutate({
+        mutation: subTaskMutation,
+        variables: { objects: subTasks } ,
         // prefetch: true,
       })
     },

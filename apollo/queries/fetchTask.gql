@@ -1,0 +1,10 @@
+query {
+    tasks {
+        id
+        project
+        task_description
+        task_time_estimate
+        task_title
+        created_at
+      }
+}

@@ -1,0 +1,13 @@
+query {
+   time_log {
+       description
+       first_name
+       id
+       last_name
+       project
+       task_id
+       task_title
+       time_decimal
+       time_normal
+     }
+}
