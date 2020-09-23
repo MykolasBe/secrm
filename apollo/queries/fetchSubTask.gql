@@ -1,0 +1,14 @@
+query {
+  tasks(where: {parent_id: {_is_null: false}}) {
+       id
+       created_at
+       project
+       task_description
+       task_time_estimate
+       task_title
+       time_logs {
+         time_decimal
+         billed
+       }
+   }
+}

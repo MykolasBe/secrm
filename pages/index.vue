@@ -14,33 +14,70 @@
           <td>{{ task.task_title }}</td>
           <td>{{ task.project }}</td>
           <td>100000$</td>
-          <td></td>
+          <td>{{ totalTime(task, task.time_logs) }} / {{ Number(( estimateTime(task)).toFixed(1)) }} / {{ soldTime(task, task.time_logs) }}</td>
+          <td>{{ Number(( estimateTime(task)).toFixed(1)) - soldTime(task, task.time_logs) }}</td>
+          <td>{{ $moment(task.created_at, "YYYY-MM-DD").fromNow() }}</td>
         </tr>
       </tbody>
     </table>
-    <ul>
-      <li v-for="item in tasks" :key="item.id">
-        <nuxt-link :to="`/article/${item.id}`">
+<!--    <ul>-->
+<!--      <li v-for="item in tasks" :key="item.id">-->
+<!--        <nuxt-link :to="`/article/${item.id}`">-->
 <!--          {{ item.task_title }}-->
-        </nuxt-link>
-      </li>
-    </ul>
+<!--        </nuxt-link>-->
+<!--      </li>-->
+<!--    </ul>-->
   </div>
 </template>
 
 <script>
-import tasks from '~/apollo/queries/fetchTask.gql'
-import times from '~/apollo/queries/fetchTime.gql'
+import tasks from '@/apollo/queries/fetchMainTask.gql'
 
 export default {
   apollo: {
     tasks: {
-      prefetch: true,
       query: tasks
     },
-    times: {
-      prefetch: true,
-      query: times
+  },
+  methods: {
+    totalTime:function (task, time_logs) {
+      let time_ttl = 0
+
+      time_logs.map(function (time_log){
+        time_ttl += time_log.time_decimal
+      })
+
+      task.time_log_parent_task.map(function (time_log){
+        time_ttl += time_log.time_decimal
+      })
+
+      return time_ttl
+    },
+    soldTime: function (task, time_logs) {
+      let sold_time = 0
+
+      time_logs.map(function (time_log){
+        if (time_log.billed) {
+          sold_time += time_log.time_decimal
+        }
+      })
+
+      task.time_log_parent_task.map(function (time_log){
+        if (time_log.billed) {
+          sold_time += time_log.time_decimal
+        }
+      })
+      return sold_time
+    },
+
+    estimateTime: function (task) {
+      let estimate_time = 0
+
+      task.sub_task.map(function (sub_task){
+        estimate_time += sub_task.task_time_estimate
+      })
+
+      return estimate_time / 60
     }
   },
   head: {
@@ -50,17 +87,25 @@ export default {
 </script>
 
 <style>
-ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  line-height: 1.6;
+table {
+  margin: 20px 20px;
 }
-a {
-  text-decoration: none;
-  color: #3498DB;
+thead {
+  width: 100%;
+  background: lightslategrey;
 }
-a:hover {
-  border-bottom: 1px solid;
+th{
+  padding: 15px;
+}
+th:first-of-type{
+  width: 45%;
+}
+tbody{
+
+}
+tr{
+}
+td{
+  padding: 15px;
 }
 </style>

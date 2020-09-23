@@ -25,6 +25,7 @@ export default {
 
   // Modules for dev and build (recommended) (https://go.nuxtjs.dev/config-modules)
   buildModules: [
+    '@nuxtjs/moment'
   ],
 
   // Modules (https://go.nuxtjs.dev/config-modules)
@@ -45,7 +46,7 @@ export default {
 
   // Content module configuration (https://go.nuxtjs.dev/content-config)
   content: {},
-
+  moment: {},
   apollo: {
     cookieAttributes: {
       expires: 7, // optional, default: 7 (days)

@@ -9,5 +9,7 @@ query {
        task_title
        time_decimal
        time_normal
+       billed
+       parent_task_id
      }
 }

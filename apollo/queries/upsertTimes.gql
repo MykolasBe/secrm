@@ -8,6 +8,8 @@ mutation upsert_time($objects: [time_log_insert_input!]!) {
       task_id,
       time_decimal,
       time_normal,
+      billed
+      parent_task_id
   ]}) {
     returning {
       id
@@ -19,6 +21,8 @@ mutation upsert_time($objects: [time_log_insert_input!]!) {
       task_id
       time_decimal
       time_normal
+      billed
+      parent_task_id
     }
   }
 }
