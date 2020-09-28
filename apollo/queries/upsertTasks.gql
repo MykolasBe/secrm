@@ -6,6 +6,7 @@ mutation upsert_task($objects: [tasks_insert_input!]!) {
     task_time_estimate,
     created_at
     parent_id
+    creator_name
   ]}) {
     returning {
       id
@@ -15,6 +16,7 @@ mutation upsert_task($objects: [tasks_insert_input!]!) {
       task_time_estimate
       created_at
       parent_id
+      creator_name
     }
   }
 }

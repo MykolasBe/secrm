@@ -23,7 +23,8 @@ const tasks = taskData["todo-items"].map(function(task){
     "task_title": task.content,
     "task_time_estimate": task["estimated-minutes"] ,
     "created_at": task["created-on"],
-    "parent_id": parseInt(task.parentTaskId)
+    "parent_id": parseInt(task.parentTaskId),
+    "creator_name": task["creator-firstname"] + ' ' + task["creator-lastname"]
   }
 })
 
