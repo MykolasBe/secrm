@@ -9,6 +9,8 @@
 </template>
 
 <script>
+// Dummy seed Hasura DB to have some data
+// Needs to be Hasura actions/events to fetch data
 import taskMutation from '~/apollo/queries/upsertTasks.gql'
 import timeMutation from '~/apollo/queries/upsertTimes.gql'
 
@@ -50,14 +52,12 @@ export default {
       this.$apollo.mutate({
         mutation: taskMutation,
         variables: { objects: tasks } ,
-        // prefetch: true,
       })
     },
     addTime() {
       this.$apollo.mutate({
         mutation: timeMutation,
         variables: { objects: times },
-        // prefetch: true,
       })
     }
   }
